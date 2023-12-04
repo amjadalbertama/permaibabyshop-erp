@@ -1,0 +1,23 @@
+.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+  padding: 0.67rem 0.75rem;
+}
+.loading-overlay {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #bdbdbd;
+  opacity: 0.5;
+}
+.loader-demo-box {
+  height: 100% !important;
+}
+.no-margin {
+  margin: 0 !important;
+}
+input:read-only {
+  background-color: #2A3038 !important;
+}
+.btn-md-custom {
+  padding: 10.2px !important;
+}
