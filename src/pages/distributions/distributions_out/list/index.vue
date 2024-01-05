@@ -29,6 +29,7 @@
                     <th>Branch</th>
                     <th>Status</th>
                     <th>Printed</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,9 @@
                       </td>
                       <td class="text-white" v-else>
                         <button type="button" class="btn btn-social-icon btn-block btn-primary" disabled><i class="mdi mdi-printer"></i></button>
+                      </td>
+                      <td>
+                        <router-link class="btn btn-info btn-md mx-2" :to="'/distributions/out/detail/' + lp.distribution_out_id">View</router-link>
                       </td>
                     </tr>
                   </template>
@@ -101,7 +105,11 @@
           {
             "data": "is_print",
             "names": "Printed?"
-          }
+          },
+          {
+            "data": "action",
+            "names": "Action"
+          },
         ],
         listDataDo: [],
         dataDo: {},
@@ -116,6 +124,7 @@
           order: "desc",
           order_by: "created_at"
         }
+        self.listDataDo = []
         this.$store.dispatch('getDistributionOut', {params,
           success: function (res) {
             self.dataDo = res.body.data

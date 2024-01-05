@@ -76,9 +76,9 @@
                         <span class="text-white" v-if="data.item.branch !== null">{{ data.item.branch.name }}</span>
                         <span class="text-white" v-else>-</span>
                       </template>
-                      <template #cell(type)="data">
+                      <!-- <template #cell(type)="data">
                         <span class="text-white">{{ data.item.type }}</span>
-                      </template>
+                      </template> -->
                       <template #cell(status)="data">
                         <template v-if="data.item.status === false">
                           <div class="badge badge-danger badge-pill">Unpaid</div>
@@ -95,8 +95,8 @@
                           <button type="button" class="btn btn-social-icon btn-block btn-primary" disabled><i class="mdi mdi-printer"></i></button>
                         </template>
                       </template>
-                      <template #cell(action)>
-                        <button class="btn btn-info btn-md">View</button>
+                      <template #cell(action)="data">
+                        <router-link class="btn btn-info btn-md mx-2" :to="'/distributions/in/detail/' + data.item.distribution_in_id">View</router-link>
                       </template>
                     </b-table>
                   </div>
@@ -205,10 +205,10 @@
             "data": "branch_id",
             "names": "ID Branch"
           },
-          {
-            "data": "type",
-            "names": "Type"
-          },
+          // {
+          //   "data": "type",
+          //   "names": "Type"
+          // },
           {
             "data": "status",
             "names": "Status"
@@ -239,10 +239,10 @@
             "key": "branch",
             "label": "Branch"
           },
-          {
-            "key": "type",
-            "label": "Type"
-          },
+          // {
+          //   "key": "type",
+          //   "label": "Type"
+          // },
           {
             "key": "status",
             "label": "Status"

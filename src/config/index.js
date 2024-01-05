@@ -8,8 +8,14 @@ export default {
     users: {
       me: '/api/me',
       // edit_profile: '/api/profile/edit',
-      // add_user: '/api/add_user',
-      // list_user: '/api/list_user'
+      add_user: '/api/users',
+      list_user: '/api/users'
+    },
+    roles: {
+      list_role: '/api/roles',
+      // add_role: '/api/roles',
+      // edit_profile: '/api/profile/edit',
+      // list_user: '/api/users'
     },
     menus: '/api/menu',
     masterdata: {

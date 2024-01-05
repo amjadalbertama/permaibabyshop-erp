@@ -106,11 +106,23 @@
                       <template #cell(name)="data">
                         <span class="text-white">{{ data.item.name }}</span>
                       </template>
+                      <template #cell(sku)="data">
+                        <span class="text-white">{{ data.item.sku }}</span>
+                      </template>
                       <template #cell(default_purchase_price)="data">
                         <span class="text-white">Rp {{ formatPrice(data.item.default_purchase_price) }}</span>
                       </template>
                       <template #cell(default_unit_price)="data">
                         <span class="text-white">Rp {{ formatPrice(data.item.default_unit_price) }}</span>
+                      </template>
+                      <template #cell(total_stock)="data">
+                        <span class="text-white">{{ data.item.total_stock }}</span>
+                      </template>
+                      <template #cell(category)="data">
+                        <span class="text-white">{{ data.item.category.category_name }}</span>
+                      </template>
+                      <template #cell(pack)="data">
+                        <span class="text-white">{{ data.item.pack.pack_name }}</span>
                       </template>
                       <template #cell(is_active)="data">
                         <label class="switch-custom">
@@ -118,16 +130,17 @@
                           <span class="slider-custom round"></span>
                         </label>
                       </template>
-                      <template #cell(action)>
+                      <template #cell(action)="data">
                         <button class="btn btn-warning btn-md mx-2">Edit</button>
                         <button class="btn btn-danger btn-md mx-2">Delete</button>
+                        <button class="btn btn-info btn-md mx-2" v-b-modal.modal-product @click="viewStock(data.item)">View Stock</button>
                       </template>
                     </b-table>
                   </div>
                   <div class="col-12 col-md-12 col-xs-12 mt-3">
                     <b-pagination
                       align="right"
-                      v-model="$route.params.page"
+                      v-model="page"
                       :total-rows="totalData"
                       :per-page="limit"
                       aria-controls="product-table"
@@ -141,6 +154,32 @@
         </div>
       </div>
     </div>
+    <b-modal id="modal-product" :title="selectedProduct.name" v-if="selectedProduct != null">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Branch Name</th>
+              <th scope="col">Name</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(qty, ix) in selectedProduct.product_quantities" :key="ix">
+              <td scope="col" class="text-white">{{ qty.branch.branch_name }}</td>
+              <td scope="col" class="text-white">Stock</td>
+              <td scope="col" class="text-white">{{ qty.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <template #modal-footer>
+        <div class="w-100">
+          <b-button class="btn btn-danger text-white float-right" @click="hideModal">Close</b-button>
+        </div>
+      </template>
+    </b-modal>
   </section>
 </template>
 
@@ -192,6 +231,11 @@
             'label': 'Name'
           },
           {
+            'key': 'sku',
+            // sortable: true,
+            'label': 'sku'
+          },
+          {
             'key': 'default_purchase_price',
             // sortable: true,
             'label': 'Purchase Price'
@@ -202,6 +246,21 @@
             'label': 'Unit Price'
           },
           {
+            'key': 'total_stock',
+            // sortable: true,
+            'label': 'Total Stock'
+          },
+          {
+            'key': 'category',
+            // sortable: true,
+            'label': 'Category'
+          },
+          {
+            'key': 'pack',
+            // sortable: true,
+            'label': 'Pack'
+          },
+          {
             'key': 'is_active',
             // sortable: true,
             'label': 'Is Active?'
@@ -210,7 +269,7 @@
             'key': 'action',
             // sortable: true,
             'label': 'Action'
-          }
+          },
         ],
         listDataProducts: [],
         dataProducts: {},
@@ -221,6 +280,8 @@
         search: '',
         isBusy: false,
         totalData: 0,
+        page: 1,
+        selectedProduct: null,
       }
     },
     methods: {
@@ -228,7 +289,7 @@
         let self = this
         self.isBusy = true
         var params = {
-          page: self.$route.params.page,
+          page: self.page,
           order: "asc",
           order_by: "name",
           search: self.search !== '' ? self.search : ''
@@ -244,10 +305,11 @@
             var startIndex = (params.page - 1) * self.limit + 1
             if (listData.length != 0) {
               for (var i = 0; i < listData.length; i++) {
-                // if (self.$route.params.page == 1) {
+                // if (self.page == 1) {
                 //   listData[i].id = startIndex + i
                 // }
                 listData[i].id = startIndex + i
+                listData[i].total_stock = 0
                 self.listDataProducts.push(listData[i])
               }
             }
@@ -271,7 +333,13 @@
       },
       toggleBusy() {
         this.isBusy = !this.isBusy
-      }
+      },
+      viewStock: function (item) {
+        this.selectedProduct = item
+      },
+      hideModal() {
+        this.$root.$emit('bv::hide::modal', 'modal-product', '#btnShow')
+      },
     },
     computed: {
       curPage: function () {

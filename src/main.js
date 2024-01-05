@@ -26,7 +26,8 @@ Vue.use(VueToastr)
 Vue.config.productionTip = false
 // moment.suppressDeprecationWarnings = true
 
-moment.locale("id")
+Vue.prototype.$moment = moment
+Vue.prototype.$moment.locale("id")
 
 Vue.filter('currency', function (value) {
   if (typeof value !== "number") {

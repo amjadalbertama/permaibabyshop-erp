@@ -45,17 +45,7 @@
               </td>
               <td>
                 <div class="form-group no-margin">
-                  <input type="text" class="form-control p_input" id="discount" placeholder="%" v-model="p.discount" name="discount" :class="{'is-invalid': errors.has('discount')}" data-vv-name="discount" v-validate data-vv-rules="required" @input="subtotal(index)" />
-                </div>
-              </td>
-              <td>
-                <div class="form-group no-margin">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Rp</span>
-                    </div>
-                    <input type="text" class="form-control p_input readonly" id="subtotal" placeholder="0" v-model="p.subtotal" name="subtotal" :class="{'is-invalid': errors.has('subtotal')}" data-vv-name="subtotal" v-validate data-vv-rules="required" @input="calculateTotal(index)" readonly />
-                  </div>
+                  <InputCurrencySymbol labelClass="d-none" id="subtotal" placeholder="Type Your Price Here..." v-model="p.subtotal" name="subtotal" :class="{'is-invalid': errors.has('subtotal')}" data-vv-name="subtotal" v-validate data-vv-rules="required" @input="calculateTotal(index)"></InputCurrencySymbol>
                 </div>
               </td>
               <td>
@@ -96,32 +86,16 @@
     },
     mounted: function () {
       this.getListProducts()
-      
     },
-    props: ['columns', 'items'],
+    props: ['columns', 'items', 'theProducts'],
     methods: {
       getListProducts: function () {
         let self = this
-        var params = {
-          page: 1,
-          order: "asc",
-          order_by: "name",
-          limit: 1000
-        }
-        this.$store.dispatch('getProducts', {params,
-          success: function (res) {
-            self.dataProducts = res.body.data
-            var listData = res.body.data.data
-            if (listData.length != 0) {
-              for (var i = 0; i < listData.length; i++) {
-                self.listDataProducts.push(listData[i])
-              }
-            }
-          },
-          error: (err) => {
-            console.log(err)
+        if (self.theProducts.length != 0) {
+          for (var i = 0; i < self.theProducts.length; i++) {
+            self.listDataProducts.push(self.theProducts[i].product)
           }
-        })
+        }
       },
       removeField: function (id) {
         var self = this
@@ -140,12 +114,7 @@
       calculateTotal(index) {
         // Calculate total for the specified item
         const item = this.items[index]
-        console.log(item.discount)
-        if (item.discount === 0 || item.discount === "") {
-          return this.formatPrice(item.quantity * item.purchase_price)
-        } else {
-          return this.formatPrice(item.quantity * item.purchase_price * (item.discount / 100))
-        }
+        return item.quantity * item.purchase_price
       },
       pickedItem: function (index) {
         var self = this
@@ -160,7 +129,7 @@
           ...self.items[index],
           description: product.description,
           purchase_price: Number(product.default_purchase_price),
-          subtotalPack: product.default_purchase_price * product.pack.pack_qty,
+          subtotalPack: product.default_purchase_price * product.pack.quantities_per_pack,
           pack_id: product.pack_id,
           is_ppn: product.is_ppn
         })

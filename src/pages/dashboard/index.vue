@@ -686,6 +686,7 @@
         listDataSupplier: [],
         listDataBranchs: [],
         listDataPacks: [],
+        listDataRoles: []
       };
     },
     mounted () {
@@ -694,6 +695,7 @@
       this.getListSupplier()
       this.getListBranchs()
       this.getListPacks()
+      this.getListRoles()
     },
     methods: {
       toggleProBanner: () => {
@@ -779,7 +781,23 @@
             console.log(err)
           }
         })
-      }
+      },
+      getListRoles: function () {
+        let self = this
+        this.$store.dispatch('getRoles', {
+          success: function (res) {
+            var listData = res.body.data
+            if (listData.length != 0) {
+              for (var i = 0; i < listData.length; i++) {
+                self.listDataRoles.push(listData[i])
+              }
+            }
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      },
     }
   }
 </script>

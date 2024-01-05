@@ -68,9 +68,9 @@
               if (type === 'display') {
                 let badges = ``
                 if (data) {
-                  badges = `<div class="badge badge-success">Active</div>`
+                  badges = `<div class="badge badge-warning">Cabang</div>`
                 } else {
-                  badges = `<div class="badge badge-danger">Not Active</div>`
+                  badges = `<div class="badge badge-info">Gudang</div>`
                 }
 
                 return badges
@@ -96,7 +96,9 @@
             }
           },
           error: (err) => {
-            console.log(err)
+            if (err.success === false && err.message === "Unauthorised") {
+              self.$router.push('/auth-pages/login')
+            }
           }
         })
       }

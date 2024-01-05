@@ -86,8 +86,8 @@
                           <div class="badge badge-success badge-pill">Paid</div>
                         </template>
                       </template>
-                      <template #cell(action)>
-                        <button class="btn btn-warning btn-md mx-2">View</button>
+                      <template #cell(action)="data">
+                        <router-link class="btn btn-warning btn-md mx-2" :to="'/purchases/po/detail/' + data.item.purchase_order_id">View</router-link>
                       </template>
                     </b-table>
                   </div>
@@ -210,7 +210,9 @@
             }
           },
           error: (err) => {
-            console.log(err)
+            if (err.success === false && err.message === "Unauthorised") {
+              self.$router.push('/auth-pages/login')
+            }
           }
         })
       }

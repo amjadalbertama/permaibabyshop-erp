@@ -29,6 +29,7 @@ let router = new Router({
       component: {
         render (c) { return c('router-view') }
       },
+      meta: {auth: false},
       children: [
         {
           path: 'login',
@@ -48,7 +49,7 @@ let router = new Router({
       meta: {auth: true},
       children: [
         {
-          path: '/products/product/list/:page',
+          path: '/products/product/list',
           name: 'Products List',
           component: () => import('@/pages/masterdata/products/list')
         },
@@ -142,6 +143,11 @@ let router = new Router({
           name: 'New Purchase Order',
           component: () => import('@/pages/purchase_orders/add')
         },
+        {
+          path: '/purchases/po/detail/:id',
+          name: 'Detail Purchase Order',
+          component: () => import('@/pages/purchase_orders/detail')
+        },
       ]
     },
     {
@@ -204,9 +210,24 @@ let router = new Router({
       meta: {auth: true},
       children: [
         {
+          path: '/distributions/in/new',
+          name: 'Add Distribution In',
+          component: () => import('@/pages/distributions/distributions_in/add')
+        },
+        {
           path: '/distributions/in/list/:page',
           name: 'Distribution In List',
           component: () => import('@/pages/distributions/distributions_in/list')
+        },
+        {
+          path: '/distributions/in/detail/:id',
+          name: 'Distribution In Detail',
+          component: () => import('@/pages/distributions/distributions_in/detail')
+        },
+        {
+          path: '/distributions/out/new',
+          name: 'Add Distribution Out',
+          component: () => import('@/pages/distributions/distributions_out/add')
         },
         {
           path: '/distributions/out/list/:page',
@@ -214,9 +235,93 @@ let router = new Router({
           component: () => import('@/pages/distributions/distributions_out/list')
         },
         {
-          path: '/distributions/new',
-          name: 'Add Distribution',
-          component: () => import('@/pages/distributions/add')
+          path: '/distributions/out/detail/:id',
+          name: 'Distribution Out Detail',
+          component: () => import('@/pages/distributions/distributions_out/detail')
+        },
+      ]
+    },
+    {
+      path: '/reports',
+      component: layout,
+      meta: {auth: true},
+      children: [
+        {
+          path: '/report/stock/list',
+          name: 'Stocks',
+          component: () => import('@/pages/masterdata/stocks/list')
+        }
+      ]
+    },
+    {
+      path: '/finance_accounting',
+      component: layout,
+      meta: {auth: true},
+      children: [
+        {
+          path: '/finance_accounting/sales',
+          name: 'Finance Sales',
+          component: () => import('@/pages/finance_accounting/sales/list')
+        },
+        {
+          path: '/finance_accounting/petty_cash',
+          name: 'Finance Petty Cash',
+          component: () => import('@/pages/finance_accounting/petty_cash/list')
+        },
+        {
+          path: '/finance_accounting/bank',
+          name: 'Finance Bank',
+          component: () => import('@/pages/finance_accounting/bank/list')
+        },
+        {
+          path: '/finance_accounting/purchase',
+          name: 'Finance Purchase',
+          component: () => import('@/pages/finance_accounting/purchase/list')
+        },
+        {
+          path: '/finance_accounting/memorials',
+          name: 'Finance Memorials',
+          component: () => import('@/pages/finance_accounting/memorials/list')
+        },
+        {
+          path: '/finance_accounting/general_ledger',
+          name: 'Finance General Ledger',
+          component: () => import('@/pages/finance_accounting/general_ledger/list')
+        },
+        {
+          path: '/finance_accounting/receivables',
+          name: 'Finance Receivables',
+          component: () => import('@/pages/finance_accounting/receivables/list')
+        },
+        {
+          path: '/finance_accounting/dept',
+          name: 'Finance Dept',
+          component: () => import('@/pages/finance_accounting/dept/list')
+        },
+        {
+          path: '/finance_accounting/assets',
+          name: 'Finance Assets',
+          component: () => import('@/pages/finance_accounting/assets/list')
+        },
+        {
+          path: '/finance_accounting/reconciliation',
+          name: 'Finance Reconciliation',
+          component: () => import('@/pages/finance_accounting/reconciliation/list')
+        },
+        {
+          path: '/finance_accounting/trial_balance',
+          name: 'Finance Trial Balance',
+          component: () => import('@/pages/finance_accounting/trial_balance/list')
+        },
+        {
+          path: '/finance_accounting/retained_earnings',
+          name: 'Finance Retained Earnings',
+          component: () => import('@/pages/finance_accounting/retained_earnings/list')
+        },
+        {
+          path: '/finance_accounting/income_statement',
+          name: 'Finance Income Statement',
+          component: () => import('@/pages/finance_accounting/income_statement/list')
         },
       ]
     },
@@ -237,26 +342,28 @@ router.afterEach((to, from, next) => {
   }
 })
 
-function getMenu () {
-  store.dispatch('getMenu', {
-    success: function (response) {
-      console.log(router)
-      console.log(response.body)
-    },
-    error: (err) => {
-      console.log(err)
-    }
-  })
-}
+// function getMenu () {
+//   store.dispatch('getMenu', {
+//     success: function (response) {
+//       console.log(router)
+//       console.log(response.body)
+//     },
+//     error: (err) => {
+//       console.log(err)
+//     }
+//   })
+// }
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.auth)) {
+    console.log(store.getters.loggedIn)
     if (store.getters.loggedIn) {
-      getMenu()
+      // getMenu()
       next()
       return
+    } else {
+      next('/auth-pages/login')
     }
-    next('/auth-pages/login')
   }
   next()
 })

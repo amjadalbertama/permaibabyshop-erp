@@ -18,6 +18,7 @@ export const state = {
   listDi: [],
   listDo: [],
   listUsers: [],
+  listRoles: [],
   branch: {},
   pack: {},
   category: {},
@@ -78,7 +79,7 @@ export const mutations = {
   setEditProfiles (state, data) {
     state.editProfile = data
   },
-  setlistUsers (state, data) {
+  setListUsers (state, data) {
     state.listUsers = data
   },
   setDataBranch (state, data) {
@@ -113,6 +114,9 @@ export const mutations = {
   },
   setAddDo (state, data) {
     state.addDo = data
+  },
+  setListRoles (state, data) {
+    state.listRoles = data
   },
 }
 
@@ -191,6 +195,9 @@ export const getters = {
   addDo (state) {
     return state.addDo
   },
+  listRoles (state) {
+    return state.listRoles
+  },
 }
 
 export const actions = {
@@ -220,7 +227,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   logout ({commit}, {data, success, error}) {
@@ -232,7 +242,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   // getCredentials ({commit}) {
@@ -281,11 +294,9 @@ export const actions = {
         router.push('/')
       }
     }, error => {
-      if (router.name !== 'login') {
-        window.localStorage.clear()
-        // router.push('/auth-pages/login')
+      if (error.body.success === false && error.body.message === "Unauthorised") {
+        // router.push("/auth-pages/login").catch(() => true)
       }
-      console.log(error.body)
     })
   },
   getMenu ({success, error}) {
@@ -309,8 +320,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getCategories ({commit}, {success, error}) {
@@ -322,8 +335,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getSupplier ({commit}, {success, error}) {
@@ -335,8 +350,26 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
+    })
+  },
+  getOneSupplier ({emptyParam}, {params, success, error}) {
+    mainApi.getOneSupplier(params, function (response) {
+      if (response.body.success === true) {
+        success(response)
+        console.log(emptyParam)
+      }
+      if (typeof success === 'function') {
+        success(response)
+      }
+    }, errors => {
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getBranch ({commit}, {success, error}) {
@@ -348,8 +381,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getPacks ({commit}, {success, error}) {
@@ -361,8 +396,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveBranch ({commit}, {data, success, error}) {
@@ -374,7 +411,11 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        router.push("/auth-pages/login").catch(() => true)
+      } else {
+        error(errors.body)
+      }
     })
   },
   savePack ({commit}, {data, success, error}) {
@@ -386,7 +427,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveCategory ({commit}, {data, success, error}) {
@@ -398,7 +442,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveProduct ({commit}, {data, success, error}) {
@@ -410,7 +457,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveSupplier ({commit}, {data, success, error}) {
@@ -422,7 +472,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   //distributions
@@ -435,8 +488,26 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
+    })
+  },
+  getOnePurchaseOrder ({emptyParam}, {params, success, error}) {
+    mainApi.getOnePurchaseOrder(params, function (response) {
+      if (response.body.success === true) {
+        success(response)
+        console.log(emptyParam)
+      }
+      if (typeof success === 'function') {
+        success(response)
+      }
+    }, errors => {
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getDistributionIn ({commit}, {params, success, error}) {
@@ -448,8 +519,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   getDistributionOut ({commit}, {params, success, error}) {
@@ -461,8 +534,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors.body)
-      console.log(errors.body)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   savePurchaseOrder ({commit}, {data, success, error}) {
@@ -474,7 +549,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveDistributionOut ({commit}, {data, success, error}) {
@@ -486,7 +564,10 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
   saveDistributionIn ({commit}, {data, success, error}) {
@@ -498,7 +579,57 @@ export const actions = {
         success(response)
       }
     }, errors => {
-      error(errors)
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
+    })
+  },
+  getUsers ({commit}, {success, error}) {
+    mainApi.getUsers(function (response) {
+      if (response.body.success === true) {
+        commit('setListUsers', response.body.data)
+      }
+      if (typeof success === 'function') {
+        success(response)
+      }
+    }, errors => {
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
+    })
+  },
+  saveUser ({commit}, {data, success, error}) {
+    mainApi.saveUser(data, function (response) {
+      if (response.body.success === true || response.status === 201) {
+        commit('setUserData', response.body)
+      }
+      if (typeof success === 'function') {
+        success(response)
+      }
+    }, errors => {
+      if (typeof error === 'function') {
+        error(errors.body)
+      }
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        router.push("/auth-pages/login").catch(() => true)
+      }
+    })
+  },
+  getRoles ({commit}, {success, error}) {
+    mainApi.getRoles(function (response) {
+      if (response.body.success === true) {
+        commit('setListRoles', response.body.data)
+      }
+      if (typeof success === 'function') {
+        success(response)
+      }
+    }, errors => {
+      if (errors.body.success === false && errors.body.message === "Unauthorised") {
+        error(errors.body)
+        router.push("/auth-pages/login").catch(() => true)
+      }
     })
   },
 }

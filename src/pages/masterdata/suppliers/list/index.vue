@@ -90,7 +90,9 @@
             }
           },
           error: (err) => {
-            console.log(err)
+            if (err.success === false && err.message === "Unauthorised") {
+              self.$router.push('/auth-pages/login')
+            }
           }
         })
       }

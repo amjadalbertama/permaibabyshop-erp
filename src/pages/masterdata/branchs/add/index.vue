@@ -23,14 +23,36 @@
           <div class="card-body">
             <h4 class="card-title">{{ $route.name }}</h4>
             <p class="card-description">Add your retail branch</p>
-            <form class="forms-sample">
-              <div class="form-group">
-                <label for="branch_name">Name</label>
-                <input type="text" class="form-control" id="branch_name" placeholder="Type Your Branch Name Here..." v-model="branch.name" name="branch_name" :class="{'is-invalid': errors.has('branch_name')}" data-vv-name="branch_name" v-validate data-vv-rules="required" />
-                <label id="branch-error" class="error mt-2 text-danger" for="branch_name">{{ errors.first('branch_name') }}</label>
+            <form class="forms-sample row">
+              <div class="col-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <label for="branch_name">Name</label>
+                  <input type="text" class="form-control" id="branch_name" placeholder="Type Your Branch Name Here..." v-model="branch.name" name="branch_name" :class="{'is-invalid': errors.has('branch_name')}" data-vv-name="branch_name" v-validate data-vv-rules="required" />
+                  <label id="branch-error" class="error mt-2 text-danger" for="branch_name">{{ errors.first('branch_name') }}</label>
+                </div>
               </div>
-              <button type="submit" class="btn btn-primary me-2" v-on:click="storeBranch">Submit</button>
-              <button class="btn btn-dark">Cancel</button>
+              <div class="col-6 col-md-6 col-sm-12 col-xs-12">
+                <label class="">Cabang / Gudang</label>
+                <div class="form-group row">
+                  <div class="col-sm-4">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="typeWarehouseOrBranch" id="cabang" v-model="branch.type" value="false" :class="{'is-invalid': errors.has('type')}" data-vv-name="type" v-validate data-vv-rules="required"> Cabang <i class="input-helper"></i></label>
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="typeWarehouseOrBranch" id="gudang" v-model="branch.type" value="true" :class="{'is-invalid': errors.has('type')}" data-vv-name="type" v-validate data-vv-rules="required"> Gudang <i class="input-helper"></i></label>
+                    </div>
+                  </div>
+                  <label id="type-error" class="error mt-2 text-danger" for="type">{{ errors.first('type') }}</label>
+                </div>
+              </div>
+              <div class="col-6 col-md-6 col-sm-12 col-xs-12">
+                <button type="submit" class="btn btn-primary me-2" v-on:click="storeBranch">Submit</button>
+                <button class="btn btn-dark">Cancel</button>
+              </div>
             </form>
           </div>
         </div>
@@ -49,7 +71,9 @@
     },
     data: function () {
       return {
-        branch: {},
+        branch: {
+          type: false
+        },
         loading: false
       }
     },
@@ -72,7 +96,7 @@
           },
           error: (err) => {
             // console.log(error)
-            self.responseMessage = err.body.message
+            self.responseMessage = err.message
             self.$toastr.e(self.responseMessage)
             self.loading = false
           }

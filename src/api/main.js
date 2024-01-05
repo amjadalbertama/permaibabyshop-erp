@@ -45,6 +45,19 @@ function getData (path, success, fail) {
   })
 }
 
+function getDataWithParam (path, params, success, fail) {
+  Vue.http.get(path + '/' + params, getAuthToken()).then(function (response) {
+    if (success) {
+      // console.log(success)
+      success(response)
+    }
+  }, error => {
+    if (fail) {
+      fail(error)
+    }
+  })
+}
+
 function getDataWithQuery (path, params, success, fail) {
   var dataHeaders = getAuthToken()
   var dataParams = getParams(params)
@@ -99,6 +112,9 @@ export default {
   getSupplier (success, fail) {
     getData(config.getApiPath(config.api.masterdata.supplier.list_supplier), success, fail)
   },
+  getOneSupplier (params, success, fail) {
+    getDataWithParam(config.getApiPath(config.api.masterdata.supplier.list_supplier), params, success, fail)
+  },
   getBranch (success, fail) {
     getData(config.getApiPath(config.api.masterdata.branch.list_branch), success, fail)
   },
@@ -124,6 +140,9 @@ export default {
   getPurchaseOrder (params, success, fail) {
     getDataWithQuery(config.getApiPath(config.api.distributions.purchase_order.list_po), params, success, fail)
   },
+  getOnePurchaseOrder (params, success, fail) {
+    getDataWithParam(config.getApiPath(config.api.distributions.purchase_order.list_po), params, success, fail)
+  },
   getDistributionIn (params, success, fail) {
     getDataWithQuery(config.getApiPath(config.api.distributions.distribution_in.list_di), params, success, fail)
   },
@@ -138,5 +157,15 @@ export default {
   },
   saveDistributionOut (data, success, fail) {
     postData(config.getApiPath(config.api.distributions.distribution_out.add_do), data, success, fail)
+  },
+  // Get Users
+  getUsers (success, fail) {
+    getData(config.getApiPath(config.api.users.list_user), success, fail)
+  },
+  saveUser (data, success, fail) {
+    postData(config.getApiPath(config.api.users.add_user), data, success, fail)
+  },
+  getRoles (success, fail) {
+    getData(config.getApiPath(config.api.roles.list_role), success, fail)
   },
 }

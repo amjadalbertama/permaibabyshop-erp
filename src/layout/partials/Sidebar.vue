@@ -174,7 +174,7 @@
                       <router-link class="nav-link" to="/products/product/new">New Product</router-link>
                     </li>
                     <li class="nav-item">
-                      <router-link class="nav-link" to="/products/product/list/1">Product List</router-link>
+                      <router-link class="nav-link" to="/products/product/list">Product List</router-link>
                     </li>
                   </ul>
                 </b-collapse>
@@ -223,21 +223,139 @@
         <li class="nav-item menu-items">
           <span class="nav-link" v-b-toggle="'ui-distributions'" :class="{'active': subIsActive('/distributions')}">
             <span class="menu-icon">
-              <i class="mdi mdi-package-variant-closed"></i>
+              <i class="mdi mdi-package text-light"></i>
             </span>
             <span class="menu-title">Distributions</span>
             <i class="mdi mdi-chevron-down"></i>
           </span>
           <b-collapse accordion="sidebar-accordion" id="ui-distributions">
             <ul class="nav flex-column sub-menu">
+              <li class="nav-item menu-items">
+                <span class="nav-link" v-b-toggle="'ui-distribution-in'" :class="{'active': subIsActive('/distributions/in')}">
+                  <span class="menu-icon">
+                    <i class="mdi mdi-package-down text-success"></i>
+                  </span>
+                  <span class="menu-title">Distribution In</span>
+                  <i class="mdi mdi-chevron-down"></i>
+                </span>
+                <b-collapse accordion="sidebar-accordion-sub" id="ui-distribution-in">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/distributions/in/new">New Distribution In</router-link>
+                    </li>
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/distributions/in/list/1">Distribution In List</router-link>
+                    </li>
+                  </ul>
+                </b-collapse>
+              </li>
+              <li class="nav-item menu-items">
+                <span class="nav-link" v-b-toggle="'ui-distribution-out'" :class="{'active': subIsActive('/distributions/out')}">
+                  <span class="menu-icon">
+                    <i class="mdi mdi-package-up text-danger"></i>
+                  </span>
+                  <span class="menu-title">Distribution Out</span>
+                  <i class="mdi mdi-chevron-down"></i>
+                </span>
+                <b-collapse accordion="sidebar-accordion-sub" id="ui-distribution-out">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/distributions/out/new">New Distribution Out</router-link>
+                    </li>
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/distributions/out/list/1">Distribution Out List</router-link>
+                    </li>
+                  </ul>
+                </b-collapse>
+              </li>
+            </ul>
+          </b-collapse>
+        </li>
+        <li class="nav-item menu-items">
+          <span class="nav-link" v-b-toggle="'ui-finance_accounting'" :class="{'active': subIsActive('/finance_accounting')}">
+            <span class="menu-icon">
+              <i class="mdi mdi-book text-primary"></i>
+            </span>
+            <span
+              class="menu-title-finance"
+              v-bind:class="{ 'full-text': isHovered }"
+              @mouseenter="isHovered = true"
+              @mouseleave="isHovered = false"
+            >
+              {{ isHovered ? originalText : truncatedText }}
+            </span>
+            <!-- <span class="menu-title" id="financeTitle">Finance & Accounting</span> -->
+            <i class="mdi mdi-chevron-down"></i>
+          </span>
+          <b-collapse accordion="sidebar-accordion" id="ui-finance_accounting">
+            <ul class="nav flex-column sub-menu">
               <li class="nav-item">
-                <router-link class="nav-link" to="/distributions/new">New Distribution</router-link>
+                <router-link class="nav-link" to="/finance_accounting/bank">Bank</router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link" to="/distributions/in/list/1">Distribution In</router-link>
+                <router-link class="nav-link" to="/finance_accounting/petty_cash">Petty Cash</router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link" to="/distributions/out/list/1">Distribution Out</router-link>
+                <router-link class="nav-link" to="/finance_accounting/sales">Sales</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/purchase">Purchase</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/memorials">Memorials</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/general_ledger">General Ledger</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/receivables">Receivables</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/dept">Dept</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/assets">Assets</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/reconciliation">Reconciliation</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/trial_balance">Trial Balance</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/retained_earnings">Retained Earnings</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/finance_accounting/income_statement">Income Statement</router-link>
+              </li>
+            </ul>
+          </b-collapse>
+        </li>
+        <li class="nav-item menu-items">
+          <span class="nav-link" v-b-toggle="'ui-reports'" :class="{'active': subIsActive('/reports')}">
+            <span class="menu-icon">
+              <i class="mdi mdi-clipboard-list-outline text-danger"></i>
+            </span>
+            <span class="menu-title">Reports</span>
+            <i class="mdi mdi-chevron-down"></i>
+          </span>
+          <b-collapse accordion="sidebar-accordion" id="ui-reports">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item menu-items">
+                <span class="nav-link" v-b-toggle="'ui-stocks'" :class="{'active': subIsActive('/stock')}">
+                  <span class="menu-icon">
+                    <i class="mdi mdi-package-down text-success"></i>
+                  </span>
+                  <span class="menu-title">Stock</span>
+                  <i class="mdi mdi-chevron-down"></i>
+                </span>
+                <b-collapse accordion="sidebar-accordion-sub" id="ui-stocks">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/report/stock/list">Stock List</router-link>
+                    </li>
+                  </ul>
+                </b-collapse>
               </li>
             </ul>
           </b-collapse>
@@ -269,6 +387,22 @@
   </section>
 </template>
 
+<style>
+.menu-title-finance {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px; /* Set your desired character limit */
+  cursor: pointer;
+}
+
+.menu-title-finance.full-text {
+  white-space: normal;
+  max-width: none;
+}
+</style>
+
 <script>
   // import Spinner from 'vue-spinkit'
   import { mapGetters } from 'vuex'
@@ -284,8 +418,10 @@
         collapses: [ 
        { show: false },
        { show: false },
-       { show: false }
-      ]
+       { show: false },
+      ],
+      isHovered: false,
+      originalText: 'Finance & Accounting',
       }
     },
     mounted () {
@@ -352,6 +488,12 @@
         'credentials',
         'meh'
       ]),
+      truncatedText() {
+      const maxLength = 15; // Set your desired character limit
+      return this.originalText.length > maxLength
+        ? `${this.originalText.substring(0, maxLength)}...`
+        : this.originalText;
+      },
     },
     watch: {
       $route () {
